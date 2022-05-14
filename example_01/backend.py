@@ -9,21 +9,9 @@ def statement(invoice, plays):
 
     for p in invoice['performances']:
         play = plays[p['playID']]
-        this_amount = 0
         audience = int(p['audience'])
 
-        if play['type'] == 'tragedy':
-            this_amount = 40000
-            if audience > 30:
-                this_amount += 1000 * (audience - 30)
-
-        elif play['type'] == 'comedy':
-            this_amount = 30000
-            if audience > 20:
-                this_amount += 1000 + 500 * (audience - 20)
-            this_amount += 300 * audience
-        else:
-            raise
+        this_amount = amount_for(audience, play)
 
         volume_credits += max(audience - 30, 0)
 
@@ -39,10 +27,29 @@ def statement(invoice, plays):
     return result
 
 
-with open("plays.json", encoding='utf-8') as _json:
+def amount_for(a_perm, play):
+    result = 0
+
+    if play['type'] == 'tragedy':
+        result = 40000
+        if a_perm > 30:
+            result += 1000 * (a_perm - 30)
+
+    elif play['type'] == 'comedy':
+        result = 30000
+        if a_perm > 20:
+            result += 1000 + 500 * (a_perm - 20)
+        result += 300 * a_perm
+    else:
+        raise
+
+    return result
+
+
+with open("example_01/plays.json", encoding='utf-8') as _json:
     plays = json.load(_json)
 
-with open("invoices.json", encoding='utf-8') as _json:
+with open("example_01/invoices.json", encoding='utf-8') as _json:
     invoice = json.load(_json)
 
 print(statement(invoice[0], plays))

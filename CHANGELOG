@@ -4,9 +4,15 @@
 ## [NEXT_RELEASE] 
 
 ### Added
+
+- Refact, adding amount_for function
+
+## [0.0.1] - 2022-05-14 15:00 
+### Added
  - Makefile
  - Tests
  - Requirements
+
 ## [0.0.0] - 2022-05-13 18:00 
 
 ### Added
