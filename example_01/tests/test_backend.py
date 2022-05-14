@@ -2,38 +2,7 @@ import pytest
 from example_01.backend import statement
 
 
-@pytest.fixture
-def plays():
-    return {
-        "hairspray": {
-            "name": "Hairspray",
-            "type": "comedy"
-        },
-        "o-lago-dos-cisnes": {
-            "name": "O Lago dos Cisnes",
-            "type": "tragedy"
-        }
-    }
-
-
-@pytest.fixture
-def invoice():
-    return {
-        "customer": "LittleCo",
-        "performances": [
-            {
-                "playID": "hairspray",
-                "audience": "45"
-            },
-            {
-                "playID": "o-lago-dos-cisnes",
-                "audience": "30"
-            }
-        ]
-    }
-
-
-def test_statement(invoice, plays):
+def test_statement_should_return_success(invoice, plays):
     result = statement(invoice, plays)
 
     assert result == (
@@ -43,3 +12,15 @@ def test_statement(invoice, plays):
         'Amount owed is 970.0\n'
         'You earned 24 credits\n'
     )
+
+
+def test_statement_should_return_error_with_type_invalid(invoice):
+    plays = {
+        "hairspray": {
+            "name": "Wheee",
+            "type": "blablabla"
+        }
+    }
+
+    with pytest.raises(Exception):
+        statement(invoice, plays)
