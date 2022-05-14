@@ -1,12 +1,6 @@
 from math import floor
 import json
 
-with open("plays.json", encoding='utf-8') as _json:
-    plays = json.load(_json)
-
-with open("invoices.json", encoding='utf-8') as _json:
-    invoice = json.load(_json)
-
 
 def statement(invoice, plays):
     total_amount = 0
@@ -41,7 +35,14 @@ def statement(invoice, plays):
 
     result += f'Amount owed is {total_amount/100}\n'
     result += f'You earned {volume_credits} credits\n'
+
     return result
 
+
+with open("plays.json", encoding='utf-8') as _json:
+    plays = json.load(_json)
+
+with open("invoices.json", encoding='utf-8') as _json:
+    invoice = json.load(_json)
 
 print(statement(invoice[0], plays))
