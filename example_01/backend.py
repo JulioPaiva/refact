@@ -16,13 +16,13 @@ def statement(invoice, plays):
 
         result += '{name}: {amount} ({audience} seats)\n'.format(
             name=play_for(p)['name'],
-            amount=amount_for(p)/100,
+            amount=format_real(amount_for(p)),
             audience=p["audience"]
         )
 
         total_amount += amount_for(p)
 
-    result += f'Amount owed is {total_amount/100}\n'
+    result += f'Amount owed is {format_real(total_amount)}\n'
     result += f'You earned {volume_credits} credits\n'
 
     return result
@@ -49,6 +49,10 @@ def amount_for(a_perf):
 
 def play_for(a_perf):
     return plays[a_perf['playID']]
+
+
+def format_real(a_number):
+    return "R$ {:.2f}".format(a_number/100)
 
 
 with open("example_01/plays.json", encoding='utf-8') as _json:
