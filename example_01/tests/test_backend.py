@@ -1,15 +1,19 @@
 import pytest
-from example_01.backend import statement, amount_for
+from unittest import mock
+from example_01.backend import statement, amount_for, play_for
 
 
-def test_statement_should_return_success(invoice, plays):
+@mock.patch('example_01.backend.play_for')
+def test_statement_should_return_success(mock, invoice, plays):
+
+    mock.return_value = {"name": "Hairspray", "type": "comedy"}
+    del invoice['performances'][-1]
     result = statement(invoice, plays)
 
     assert result == (
         'Statement for LittleCo\n'
         'Hairspray: 570.0 (45 seats)\n'
-        'O Lago dos Cisnes: 400.0 (30 seats)\n'
-        'Amount owed is 970.0\n'
+        'Amount owed is 570.0\n'
         'You earned 24 credits\n'
     )
 
@@ -26,23 +30,6 @@ def test_statement_should_return_error_with_type_invalid(invoice):
         statement(invoice, plays)
 
 
-@pytest.mark.parametrize('a_perm, play, expected', [
-    (-5, 'tragedy', 40000),
-    (-5, 'comedy', 28500),
-    (0, 'tragedy', 40000),
-    (0, 'comedy', 30000),
-    (10, 'tragedy', 40000),
-    (10, 'comedy', 33000),
-    (50, 'tragedy', 60000),
-    (50, 'comedy', 61000),
-])
-def test_amount_for_should_return_success(a_perm, play, expected):
-    _play = {'type': play}
-    result = amount_for(a_perm, _play)
-
-    assert result == expected
-
-
 def test_amount_for_should_return_error():
     play = {
         "hairspray": {
@@ -53,3 +40,10 @@ def test_amount_for_should_return_error():
 
     with pytest.raises(Exception):
         amount_for(50, play)
+
+
+def test_play_for_should_return_success():
+    result = play_for({'playID': 'hamlet'})
+
+    assert result['name']
+    assert result['type']
