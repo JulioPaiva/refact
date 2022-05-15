@@ -8,18 +8,19 @@ def statement(invoice, plays):
     result = f'Statement for {invoice["customer"]}\n'
 
     for p in invoice['performances']:
-        play = plays[p['playID']]
-        audience = int(p['audience'])
 
-        this_amount = amount_for(audience, play)
+        volume_credits += max(int(p['audience']) - 30, 0)
 
-        volume_credits += max(audience - 30, 0)
+        if play_for(p)['type'] == 'comedy':
+            volume_credits += floor(int(p['audience'])/5)
 
-        if play['type'] == 'comedy':
-            volume_credits += floor(audience/5)
+        result += '{name}: {amount} ({audience} seats)\n'.format(
+            name=play_for(p)['name'],
+            amount=amount_for(p)/100,
+            audience=p["audience"]
+        )
 
-        result += f'{play["name"]}: {this_amount/100} ({p["audience"]} seats)\n'  # noqa
-        total_amount += this_amount
+        total_amount += amount_for(p)
 
     result += f'Amount owed is {total_amount/100}\n'
     result += f'You earned {volume_credits} credits\n'
@@ -27,23 +28,27 @@ def statement(invoice, plays):
     return result
 
 
-def amount_for(a_perm, play):
+def amount_for(a_perf):
     result = 0
 
-    if play['type'] == 'tragedy':
+    if play_for(a_perf)['type'] == 'tragedy':
         result = 40000
-        if a_perm > 30:
-            result += 1000 * (a_perm - 30)
+        if int(a_perf['audience']) > 30:
+            result += 1000 * (int(a_perf['audience']) - 30)
 
-    elif play['type'] == 'comedy':
+    elif play_for(a_perf)['type'] == 'comedy':
         result = 30000
-        if a_perm > 20:
-            result += 1000 + 500 * (a_perm - 20)
-        result += 300 * a_perm
+        if int(a_perf['audience']) > 20:
+            result += 1000 + 500 * (int(a_perf['audience']) - 20)
+        result += 300 * int(a_perf['audience'])
     else:
         raise
 
     return result
+
+
+def play_for(a_perf):
+    return plays[a_perf['playID']]
 
 
 with open("example_01/plays.json", encoding='utf-8') as _json:
