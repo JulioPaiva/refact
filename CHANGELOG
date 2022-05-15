@@ -5,6 +5,12 @@
 
 ### Added
 
+- Refact, adding format_real function
+
+## [0.2.0] - 2022-05-15 14:00 
+
+### Added
+
 - Refact, adding play_for function
 
 ## [0.1.0] - 2022-05-14 18:00 
