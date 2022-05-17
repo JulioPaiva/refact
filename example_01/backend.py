@@ -4,16 +4,10 @@ import json
 
 def statement(invoice, plays):
     total_amount = 0
-    volume_credits = 0
     result = f'Statement for {invoice["customer"]}\n'
 
     for p in invoice['performances']:
-
-        volume_credits += max(int(p['audience']) - 30, 0)
-
-        if play_for(p)['type'] == 'comedy':
-            volume_credits += floor(int(p['audience'])/5)
-
+        volume_credits = volume_credits_for(p)
         result += '{name}: {amount} ({audience} seats)\n'.format(
             name=play_for(p)['name'],
             amount=format_real(amount_for(p)),
@@ -26,6 +20,14 @@ def statement(invoice, plays):
     result += f'You earned {volume_credits} credits\n'
 
     return result
+
+
+def volume_credits_for(perf):
+    volume_credits = max(int(perf['audience']) - 30, 0)
+    if play_for(perf)['type'] == 'comedy':
+        volume_credits += floor(int(perf['audience'])/5)
+
+    return volume_credits
 
 
 def amount_for(a_perf):

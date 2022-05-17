@@ -21,7 +21,7 @@ def invoice():
         "customer": "LittleCo",
         "performances": [
             {
-                "playID": "hairspray",
+                "playID": "hamlet",
                 "audience": "45"
             },
             {

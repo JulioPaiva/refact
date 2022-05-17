@@ -1,6 +1,12 @@
 import pytest
 from unittest import mock
-from example_01.backend import statement, amount_for, play_for, format_real
+from example_01.backend import (
+    statement,
+    amount_for,
+    play_for,
+    format_real,
+    volume_credits_for
+)
 
 
 @mock.patch('example_01.backend.play_for')
@@ -55,5 +61,15 @@ def test_play_for_should_return_success():
 )
 def test_format_real_should_return_success(number, expected):
     result = format_real(number)
+
+    assert result == expected
+
+
+@pytest.mark.parametrize('payload, expected', [
+    ({"playID": "hamlet", "audience": "55"}, 25),
+    ({"playID": "as-like", "audience": "35"}, 12)]
+)
+def test_volume_credits_for_should_return_success(payload, expected):
+    result = volume_credits_for(payload)
 
     assert result == expected
