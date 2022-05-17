@@ -5,7 +5,8 @@ from example_01.backend import (
     amount_for,
     play_for,
     format_real,
-    volume_credits_for
+    volume_credits_for,
+    total_volume_credits
 )
 
 
@@ -20,7 +21,7 @@ def test_statement_should_return_success(mock, invoice, plays):
         'Statement for LittleCo\n'
         'Hairspray: R$ 570.00 (45 seats)\n'
         'Amount owed is R$ 570.00\n'
-        'You earned 24 credits\n'
+        'You earned 66 credits\n'
     )
 
 
@@ -73,3 +74,10 @@ def test_volume_credits_for_should_return_success(payload, expected):
     result = volume_credits_for(payload)
 
     assert result == expected
+
+
+def test_total_volume_credits_for_should_return_success():
+    result = total_volume_credits()
+
+    assert result
+    assert type(result) == int

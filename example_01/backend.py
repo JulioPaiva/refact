@@ -7,7 +7,6 @@ def statement(invoice, plays):
     result = f'Statement for {invoice["customer"]}\n'
 
     for p in invoice['performances']:
-        volume_credits = volume_credits_for(p)
         result += '{name}: {amount} ({audience} seats)\n'.format(
             name=play_for(p)['name'],
             amount=format_real(amount_for(p)),
@@ -17,9 +16,17 @@ def statement(invoice, plays):
         total_amount += amount_for(p)
 
     result += f'Amount owed is {format_real(total_amount)}\n'
-    result += f'You earned {volume_credits} credits\n'
+    result += f'You earned {total_volume_credits()} credits\n'
 
     return result
+
+
+def total_volume_credits():
+    volume_credits = 0
+    for p in invoice[0]['performances']:
+        volume_credits += volume_credits_for(p)
+
+    return volume_credits
 
 
 def volume_credits_for(perf):
