@@ -2,6 +2,12 @@
 
 ### Added
 
+- Refact, adding total_volume_credits function
+
+## [0.4.0] - 2022-05-16 23:00 
+
+### Added
+
 - Refact, adding volume_credits_for function
 
 ## [NEXT_RELEASE]
